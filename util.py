@@ -13,7 +13,7 @@ sort_dict = {"String":{"out_key":"{key}:{k:02}",
                       "secondary_key":"voltage.channel"},
           "Det_Type":{"out_key":"{k}",
                             "primary_key":"type", 
-                               "secondary_key":"daq.fcid"},
+                               "secondary_key":"name"},
             "DAQ":{"out_key":None,
                             "primary_key":None, 
                                "secondary_key":None}}
