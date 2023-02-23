@@ -396,13 +396,13 @@ class monitoring(param.Parameterized):
     @param.depends("date_range", "plot_type_tracking", "string", "sort_by")
     def view_tracking(self):
 
-        figure = plot_tracking(self._get_run_dict(), path, self.plot_types_tracking_dict[self.plot_type_tracking], self.string, key=self.sort_by)
+        figure = plot_tracking(self._get_run_dict(), self.path, self.plot_types_tracking_dict[self.plot_type_tracking], self.string, key=self.sort_by)
         return figure
 
 
     @param.depends("sort_by", watch=True)
     def update_strings(self):
-        self.strings_dict, self.chan_dict, self.channel_map = sorter(path, self.run_dict[self.run]["timestamp"], key=self.sort_by)
+        self.strings_dict, self.chan_dict, self.channel_map = sorter(self.path, self.run_dict[self.run]["timestamp"], key=self.sort_by)
 
         self.param["string"].objects = list(self.strings_dict)
         self.string = f"{list(self.strings_dict)[0]}"
@@ -414,7 +414,7 @@ class monitoring(param.Parameterized):
                                       "Alpha", "Valid. E", "Valid. A/E"]:
             figure = self.plot_types_summary_dict[self.plot_type_summary](self.run, 
                                             self.run_dict[self.run], 
-                                            path, key=self.sort_by)
+                                            self.path, key=self.sort_by)
             
             
         elif self.plot_type_summary in ["Baseline", "Spectra"]:
@@ -462,7 +462,7 @@ class monitoring(param.Parameterized):
         with shelve.open(self.plot_dict, 'r', protocol=pkl.HIGHEST_PROTOCOL) as shelf:
             channels = list(shelf.keys()) 
             
-        self.strings_dict, self.chan_dict, self.channel_map = sorter(path, self.run_dict[self.run]["timestamp"], "String")
+        self.strings_dict, self.chan_dict, self.channel_map = sorter(self.path, self.run_dict[self.run]["timestamp"], "String")
         channel_list = []
         for channel in channels:
             channel_list.append(f"{channel}: {self.channel_map[int(channel[2:])]['name']}")
@@ -530,7 +530,7 @@ class monitoring(param.Parameterized):
     
     @param.depends("run")
     def view_meta(self):
-        _, chan_dict, channel_map = sorter(path,
+        _, chan_dict, channel_map = sorter(self.path,
                                                 self.run_dict[self.run]["timestamp"],
                                                 "String")
         df_chan_dict = pd.DataFrame.from_dict(chan_dict).T
