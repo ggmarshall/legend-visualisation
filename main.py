@@ -161,6 +161,7 @@ class cal_summary(run_monitor):
                        "Tau":plot_pz_consts, "Alpha": plot_alpha, 
                        "Valid_Energy_fits": plot_no_fitted_energy_peaks, 
                        "Valid_A/E_fits": plot_no_fitted_aoe_slices,
+                       "Stability": plot_fep_stability_channels2d, 
                       "Baseline": plot_bls, "Spectra": plot_energy_spectra}
     
     plot_type = param.ObjectSelector(default = list(plot_types_dict)[0], objects= list(plot_types_dict))
@@ -469,7 +470,7 @@ class monitoring(param.Parameterized):
         
         self.param["channel"].objects = channel_list
         self.channel = channel_list[0]
-        
+        self.cached_plots ={}
         self.update_strings()
     
     
